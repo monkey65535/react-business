@@ -12,6 +12,11 @@ import Reducers from './reducers';
 // Axios 拦截器
 import './Axios.config';
 
+// 页面组件
+import Home from './containers/Home/Home';
+import Login from './containers/Login/Login';
+import Register from './containers/Register/Register';
+
 // redux调试工具
 const reduxDevtools = window.devToolsExtension
     ? window.devToolsExtension()
@@ -20,14 +25,13 @@ const reduxDevtools = window.devToolsExtension
 // 创建store
 const store = createStore(Reducers, compose(applyMiddleware(Thunk), reduxDevtools));
 
-const App = () => {
-    return (<h2>页面初始化完成</h2>);
-}
 ReactDOM.render(
     <Provider store={store}>
     <BrowserRouter>
         <Switch>
-            <App></App>
+            <Route path='/' exact component={Home}></Route>
+            <Route path='/login' component={Login}></Route>
+            <Route path='/register' component={Register}></Route>
         </Switch>
     </BrowserRouter>
 </Provider>, document.getElementById('root'));
