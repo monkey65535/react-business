@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './static/reset.css';
-import './static/index.scss';
 import registerServiceWorker from './registerServiceWorker';
 import {createStore, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
@@ -9,6 +7,11 @@ import Thunk from 'redux-thunk';
 // eslint-disable-next-line
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Reducers from './reducers';
+
+// css
+import './static/reset.css';
+import './static/index.scss';
+
 // Axios 拦截器
 import './Axios.config';
 
