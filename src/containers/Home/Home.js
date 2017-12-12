@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 
-import NavSimple from '../../components/NavSimple/NavSimple';
+import Nav from '../../components/Nav/Nav';
+import Footer from '../../components/Footer/Footer';
 class Home extends Component {
     render() {
         return (
             <div>
-                <NavSimple></NavSimple>
+                <Nav></Nav>
+                <Footer></Footer>
             </div>
         );
     }
