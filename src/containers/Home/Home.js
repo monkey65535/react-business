@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
 
 import Nav from '../../components/Nav/Nav';
-import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
+import NavSide from '../../components/NavSide/NavSide';
 class Home extends Component {
     render() {
         return (
             <div>
                 <Nav></Nav>
-                <Footer></Footer>
+                <Header></Header>
+                <div className="page-warp w">
+                    <NavSide></NavSide>
+                    <div className="content with-nav"></div>
+                </div>
             </div>
         );
     }

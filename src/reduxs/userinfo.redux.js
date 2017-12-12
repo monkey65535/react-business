@@ -50,6 +50,8 @@ export function userInfo(state = initState, action) {
             }
     }
 }
+
+
 // action creater 登录 注册 退出
 function actionLogout() {
     return {type: USER_LOGOUT}

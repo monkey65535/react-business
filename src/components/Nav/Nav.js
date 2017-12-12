@@ -15,8 +15,15 @@ class Nav extends Component {
             .bind(this);
     }
     componentDidMount(){
-        this.props.getUserInfo();
-        this.props.getCartInfo();
+        // 判断登录信息
+        if(this.props.userAbout.userName && this.props.userAbout.userId){
+            // 如果有登陆信息，那么不再获取登陆信息
+            this.props.getCartInfo();
+            return;
+        }else{
+            this.props.getUserInfo();
+            this.props.getCartInfo();
+        }
     }
     handlePushLink(to) {
         const {history, match, location} = this.props;

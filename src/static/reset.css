@@ -514,7 +514,7 @@ template {
 }
 
 body {
-    background: #f6f6f6;
+    background: #f6f6f6 !important;
     font: 12px/1.5 tahoma, arial, Microsoft YaHei, sans-serif;
 }
 
