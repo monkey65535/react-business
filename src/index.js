@@ -11,6 +11,7 @@ import Reducers from './reducers';
 // css
 import './static/reset.css';
 import './static/index.scss';
+import '../node_modules/font-awesome/css/font-awesome.css';
 
 // Axios 拦截器
 import './Axios.config';
