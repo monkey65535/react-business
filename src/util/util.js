@@ -17,7 +17,7 @@ export function errorTips(msg) {
 }
 
 // 表单验证  支持非空判断，手机号码，邮箱验证
-export function validate(value,type){
+export function validate(value,type='require'){
     value = value.trim();
     // 非空验证
     if(type === 'require'){
@@ -25,11 +25,11 @@ export function validate(value,type){
     }
 
     // 验证手机号
-    if(value === 'phone'){
+    if(type === 'phone'){
         return /^1\d{10}$/.test(value);
     }
     //邮箱验证
-    if(value === 'email'){
+    if(type === 'email'){
         return /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(value)
     }
 

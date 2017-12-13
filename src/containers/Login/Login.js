@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import NavSimple from '../../components/NavSimple/NavSimple';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {message} from 'antd';
-import {userLogin,clearErrorMsg} from '../../reduxs/userinfo.redux';
+import {userLogin, clearErrorMsg} from '../../reduxs/userinfo.redux';
 import './Login.scss';
 
-@connect(state => state, {userLogin,clearErrorMsg})
+@connect(state => state, {userLogin, clearErrorMsg})
 class Login extends Component {
     constructor() {
         super();
@@ -18,10 +17,20 @@ class Login extends Component {
             .handleSubmitForm
             .bind(this);
     }
+    componentDidMount() {
+        // 判断props中的错误信息
+        if (this.props.userInfo.errorMsg !== '') {
+            this
+                .props
+                .clearErrorMsg('');
+        }
+    }
     handleChangeValue(key, ev) {
         // 判断props中的错误信息
-        if(this.props.userInfo.errorMsg !== ''){
-            this.props.clearErrorMsg();
+        if (this.props.userInfo.errorMsg !== '') {
+            this
+                .props
+                .clearErrorMsg('');
         }
         const val = ev.target.value;
         this.setState({[key]: val})
@@ -29,11 +38,15 @@ class Login extends Component {
     handleSubmitForm() {
         const {username, password} = this.state;
         if (!username.trim()) {
-            message.error('请填写用户名');
+            this
+                .props
+                .clearErrorMsg('请填写用户名');
             return;
         }
         if (!password.trim()) {
-            message.error('请填写密码');
+            this
+                .props
+                .clearErrorMsg('请填写密码');
             return;
         }
         this
@@ -51,8 +64,14 @@ class Login extends Component {
                 </div>
             )
             : null;
+        const isLogin = this.props.userInfo.userAbout.username && this.props.userInfo.userAbout.username
+            ? (
+                <Redirect to="/"></Redirect>
+            )
+            : null;
         return (
             <div className="user-login-container">
+                {isLogin}
                 <NavSimple></NavSimple>
                 <div className="page-wrap">
                     <div className="w">

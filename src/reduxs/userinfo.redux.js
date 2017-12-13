@@ -2,6 +2,7 @@ import Axios from 'axios';
 // action
 const USER_LOGIN = 'USER_LOGIN';
 const USER_LOGOUT = 'USER_LOGOUT';
+const USER_REGISTER = 'USER_REGISTER';
 const GET_USER_INFO = 'GET_USER_INFO';
 const GET_CART_INFO = 'GET_CART_INFO';
 const CLEAR_ERRMSG = 'CLER_ERRMSG';
@@ -58,7 +59,7 @@ export function userInfo(state = initState, action) {
         case CLEAR_ERRMSG:
             return {
                 ...state,
-                errorMsg:''
+                errorMsg: action.msg
             }
         default:
             return {
@@ -68,8 +69,8 @@ export function userInfo(state = initState, action) {
 }
 
 // 清除错误提示
-export function clearErrorMsg(){
-    return {type:CLEAR_ERRMSG}
+export function clearErrorMsg(message) {
+    return {type: CLEAR_ERRMSG, msg: message}
 }
 
 // action creater  登录
@@ -105,7 +106,39 @@ export function userLogin({username, password}) {
             });
     }
 }
-//  注册  退出
+//  注册
+function actionRegister(payload) {
+    return {payload, type: USER_REGISTER}
+}
+export function userRegister({username,password,confirmPassword,phone,email,question,answer}){
+    return dispatch => {
+        Axios.post('/user/register.do',{username,password,phone,email,question,answer}).then(res=>{
+            console.log(res);
+            if(res.status === 200){
+                if(res.data.status === 0){
+
+                }else if(res.data.status === 1){
+                    // 用户名已存在
+                }else{
+                    // 失败
+                }
+            }
+        })
+    }
+}
+// 验证用户名是否重复
+export function checkUserName(username){
+    return dispatch => {
+        Axios.post('/user/check_valid.do',{str:username,type:'username'}).then(res=>{
+            if(res.status === 200){
+                if(res.data.status === 1){
+                    dispatch(clearErrorMsg(res.data.msg))
+                }
+            }
+        })
+    }
+}
+//  退出
 function actionLogout() {
     return {type: USER_LOGOUT}
 }
