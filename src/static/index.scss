@@ -14,19 +14,17 @@
     padding: 10px;
     margin-bottom: 10px;
     background: #fff;
-}
-
-.panel .panel-title {
-    padding: 10px;
-    font-size: 14px;
-    color: #666;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-}
-
-.panel .panel-body {
-    padding: 10px;
-    overflow: hidden;
+    .panel-title {
+        padding: 10px;
+        font-size: 14px;
+        color: #666;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+    }
+    .panel-body {
+        padding: 10px;
+        overflow: hidden;
+    }
 }
 
 
@@ -47,10 +45,9 @@
     cursor: pointer;
     text-decoration: none;
     margin-right: 4px;
-}
-
-.link:hover {
-    color: #e80012;
+    &:hover {
+        color: #e80012;
+    }
 }
 
 .link-text {

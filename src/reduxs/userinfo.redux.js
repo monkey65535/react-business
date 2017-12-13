@@ -1,8 +1,10 @@
 import Axios from 'axios';
 // action
+const USER_LOGIN = 'USER_LOGIN';
 const USER_LOGOUT = 'USER_LOGOUT';
 const GET_USER_INFO = 'GET_USER_INFO';
 const GET_CART_INFO = 'GET_CART_INFO';
+const CLEAR_ERRMSG = 'CLER_ERRMSG';
 //reducer
 const initState = {
     userAbout: {
@@ -18,7 +20,8 @@ const initState = {
         cartProductVoList: [],
         allChecked: true,
         cartTotalPrice: 0
-    }
+    },
+    errorMsg: ''
 };
 export function userInfo(state = initState, action) {
     switch (action.type) {
@@ -30,7 +33,15 @@ export function userInfo(state = initState, action) {
                     ...action.payload
                 }
             }
-
+        case USER_LOGIN:
+            // 获取用户信息
+            return {
+                ...state,
+                userAbout: {
+                    ...action.payload.data
+                },
+                errorMsg: action.payload.errorMsg
+            }
         case USER_LOGOUT:
             // 退出
             return {
@@ -44,6 +55,11 @@ export function userInfo(state = initState, action) {
                     ...action.payload
                 }
             }
+        case CLEAR_ERRMSG:
+            return {
+                ...state,
+                errorMsg:''
+            }
         default:
             return {
                 ...state
@@ -51,8 +67,45 @@ export function userInfo(state = initState, action) {
     }
 }
 
+// 清除错误提示
+export function clearErrorMsg(){
+    return {type:CLEAR_ERRMSG}
+}
 
-// action creater 登录 注册 退出
+// action creater  登录
+function actionLogin(payload) {
+    return {payload, type: USER_LOGIN}
+}
+export function userLogin({username, password}) {
+    return dispatch => {
+        Axios
+            .post('/user/login.do', {username, password})
+            .then(res => {
+                if (res.status === 200) {
+                    const resData = res.data;
+                    let payload = null;
+                    if (resData.status === 0) {
+                        //登录成功
+                        payload = {
+                            data: {
+                                ...resData.data
+                            },
+                            errorMsg: ''
+                        }
+                    } else {
+                        payload = {
+                            data: {
+                                ...initState.userAbout
+                            },
+                            errorMsg: resData.msg
+                        }
+                    }
+                    dispatch(actionLogin(payload));
+                }
+            });
+    }
+}
+//  注册  退出
 function actionLogout() {
     return {type: USER_LOGOUT}
 }
