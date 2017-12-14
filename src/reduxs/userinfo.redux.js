@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import Qs from 'qs';
 // action 账号相关
 const USER_LOGIN = 'USER_LOGIN';
 const USER_LOGOUT = 'USER_LOGOUT';
@@ -11,6 +12,8 @@ const RESET_PASSWORD = 'RESET_PASSWORD';
 const GET_CART_INFO = 'GET_CART_INFO';
 // 操作相关
 const CLEAR_ERRMSG = 'CLER_ERRMSG';
+
+Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //reducer
 const initState = {
     userAbout: {
@@ -89,9 +92,6 @@ export function userInfo(state = initState, action) {
     }
 }
 
-
-
-
 // 清除错误提示
 export function clearErrorMsg(message) {
     return {type: CLEAR_ERRMSG, msg: message}
@@ -104,7 +104,7 @@ function actionLogin(payload) {
 export function userLogin({username, password}) {
     return dispatch => {
         Axios
-            .post('/user/login.do', {username, password})
+            .post('/user/login.do', Qs.stringify({username, password}))
             .then(res => {
                 if (res.status === 200) {
                     const resData = res.data;
@@ -144,59 +144,41 @@ export function userRegister({
     answer
 }, history) {
     return dispatch => {
-        // Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-        // request
+        
         // username,password,email,phone,question,answer
-        // Axios
-        //     .post('/user/register.do', {
-        //     username,
-        //     password,
-        //     email,
-        //     phone,
-        //     question,
-        //     answer
-        // })
-        //     .then(res => {
-        //         console.log(res);
-        //         if (res.status === 200) {
-        //             if (res.data.status === 0) {
-        //                 dispatch(actionRegister(history));
-        //             } else if (res.data.status === 1) {
-        //                 // 用户已存在
-        //                 dispatch(clearErrorMsg('用户已存在'));
-        //             } else {
-        //                 // 失败
-        //                 dispatch(clearErrorMsg('未知错误，请重试'));
-        //             }
-        //         }
-        //     })
-        Axios({
-            method:'POST',
-            headers:{
-                'Content-Type':'application/x-www-form-urlencoded'
-            },
-            url:'/user/register.do',
-            data:{
-                username,
-                password,
-                email,
-                phone,
-                question,
-                answer
-            }
-        }).then(res=>{
-            console.log(res);
-        })
+        Axios
+            .post('/user/register.do', Qs.stringify({
+            username,
+            password,
+            email,
+            phone,
+            question,
+            answer
+        }))
+            .then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(actionRegister(history));
+                    } else if (res.data.status === 1) {
+                        // 用户已存在
+                        dispatch(clearErrorMsg(res.data.msg));
+                    } else {
+                        // 失败
+                        dispatch(clearErrorMsg('未知错误，请重试'));
+                    }
+                }
+            })
     }
 }
 // 验证用户名是否重复
 export function checkUserName(username) {
     return dispatch => {
         Axios
-            .post('/user/check_valid.do', {
-            str: username,
-            type: 'username'
-        })
+            .post('/user/check_valid.do',Qs.stringify( {
+                str: username,
+                type: 'username'
+            }))
             .then(res => {
                 if (res.status === 200) {
                     if (res.data.status === 1) {

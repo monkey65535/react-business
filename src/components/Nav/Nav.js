@@ -42,11 +42,11 @@ class Nav extends Component {
             .userLogout();
     }
     render() {
-        const isUserLogin = this.props.userAbout.userName && this.props.userAbout.userId
+        const isUserLogin = this.props.userAbout.username && this.props.userAbout.id
             ? (
                 <span className="user login">
                     <span className="link-text js-login">
-                        欢迎，<span className="username">{this.props.userAbout.userName} 
+                        欢迎，<span className="username">{this.props.userAbout.username} 
                         </span>
                     </span>
                     <span className="link js-register" onClick={this.handleLogout}> 退出</span>
