@@ -21,6 +21,7 @@ import Home from './containers/Home/Home';
 import Login from './containers/Login/Login';
 import Register from './containers/Register/Register';
 import Result from './containers/Result/Result';
+import PassReset from './containers/PassReset/PassReset';
 import Footer from './components/Footer/Footer';
 
 // redux调试工具
@@ -40,6 +41,7 @@ ReactDOM.render(
                 <Route path='/login' component={Login}></Route>
                 <Route path='/register' component={Register}></Route>
                 <Route path='/result/:type' component={Result}></Route>
+                <Route path='/pass-reset' component={PassReset}></Route>
             </Switch>
             <Footer></Footer>
         </div>

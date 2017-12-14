@@ -38,6 +38,7 @@ class Register extends Component {
     }
     handleSubmit() {
         const {username,password,confirmPassword,phone,email,question,answer} = this.state;
+        const {history} = this.props;
         //表单验证
         if(!username.trim()){
             this.props.clearErrorMsg('请填写用户名');
@@ -71,7 +72,7 @@ class Register extends Component {
             this.props.clearErrorMsg('提示答案不能为空');
             return;
         }
-        this.props.userRegister({username,password,confirmPassword,phone,email,question,answer});
+        this.props.userRegister({username,password,confirmPassword,phone,email,question,answer},history);
     }
     checkUsername(ev){
         const username = ev.target.value;

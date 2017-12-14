@@ -109,7 +109,7 @@ class Login extends Component {
                                 </div>
                                 <div className="btn btn-submit" id="submit" onClick={this.handleSubmitForm}>登录</div>
                                 <div className="link-item">
-                                    <Link className="link" to='/'>忘记密码</Link>
+                                    <Link className="link" to='/pass-reset'>忘记密码</Link>
                                     <Link className="link" to='/register'>免费注册</Link>
                                 </div>
                             </div>
