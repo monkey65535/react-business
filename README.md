@@ -58,3 +58,16 @@
 ## 配置sass
 
 ## 配置font-awesome
+
+## 关于使用Axios提交表单信息后台无法接收的问题
+在使用Axios提交表单信息的过程中，发现由于使用方法是把表单内容获取之后组成一个对象，然后发送给后端，后端无法接收到正确的数据，返回500错误
+解决办法：
+使用qs库，将发送的参数进行表单序列化  
+
+[qs库 ： https://www.npmjs.com/package/qs](https://www.npmjs.com/package/qs)
+
+使用方法：
+```
+import Qs from 'qs';
+Axios.post(url,Qs.stringify({data})).then(res=>{});
+```
