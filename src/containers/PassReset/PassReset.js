@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import NavSimple from '../../components/NavSimple/NavSimple';
 import {Link, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {clearErrorMsg,checkUserHasQuestion} from '../../reduxs/userinfo.redux';
+import {clearErrorMsg,checkUserHasQuestion,checkAnswer,resetPassword} from '../../reduxs/userinfo.redux';
 
 // 加载页面组件
 import IsUser from './IsUser';
 import IsQuestion from './IsQuestion';
 import ResetPassword from './ResetPassword';
 
-@connect(state => state, {clearErrorMsg,checkUserHasQuestion})
+@connect(state => state, {clearErrorMsg,checkUserHasQuestion,checkAnswer,resetPassword})
 class PassReset extends Component {
     constructor() {
         super();
@@ -30,7 +30,7 @@ class PassReset extends Component {
                 .clearErrorMsg('');
         }
     }
-    submitUsername(username, history) {
+    submitUsername(username, history=this.props.history) {
         if (!username) {
             this
                 .props
@@ -40,29 +40,20 @@ class PassReset extends Component {
         //提交用户名验证
         this.props.checkUserHasQuestion(username,history);
     }
-    submitQuestion({
-        question,
-        answer
-    }, history) {
-        if (!question || !answer) {
+    submitQuestion(answer, history=this.props.history) {
+        if (!answer) {
             this
                 .props
-                .clearErrorMsg('请输入密码提示问题和答案');
+                .clearErrorMsg('请输入密码提示答案');
             return;
         }
         // 提交
+        this.props.checkAnswer(answer,history);
     }
     submitPassword({
-        oldPassword,
         newPassword,
         confirmPassword
-    }, history) {
-        if (!oldPassword) {
-            this
-                .props
-                .clearErrorMsg('原密码不能为空');
-            return;
-        }
+    }, history=this.props.history) {
         if (!newPassword || newPassword.length < 6) {
             this
                 .props
@@ -76,6 +67,7 @@ class PassReset extends Component {
             return;
         }
         // 提交新密码验证
+        this.props.resetPassword(newPassword,history);
     }
     render() {
         const {errorMsg} = this.props.userInfo;
@@ -103,10 +95,10 @@ class PassReset extends Component {
                                     component={() => (<IsUser cleanInput={this.props.clearErrorMsg} handleSubmit={this.submitUsername}/>)}></Route>
                                 <Route
                                     path='/pass-reset/question'
-                                    component={() => (<IsQuestion cleanInput={this.props.clearErrorMsg} handleSubmit={this.submitQuestion}/>)}></Route>
+                                    component={() => (<IsQuestion question={this.props.userInfo.forgetPassword} cleanInput={this.props.clearErrorMsg} handleSubmit={this.submitQuestion}/>)}></Route>
                                 <Route
                                     path='/pass-reset/password'
-                                    component={() => (<ResetPassword cleanInput={this.props.clearErrorMsg}/>)} handleSubmit={this.submitPassword}></Route>
+                                    component={() => (<ResetPassword question={this.props.userInfo.forgetPassword} cleanInput={this.props.clearErrorMsg} handleSubmit={this.submitPassword}/>)} ></Route>
                             </div>
                         </div>
                     </div>

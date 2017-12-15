@@ -19,7 +19,7 @@ class NavSide extends Component {
                     }, {
                         name: 'user-pass-update',
                         desc: '修改密码',
-                        to: './userPassUpdate'
+                        to: './pass-reset'
                     }, {
                         name: 'about',
                         desc: '关于MMall',

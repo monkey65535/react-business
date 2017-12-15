@@ -5,6 +5,8 @@ const USER_LOGIN = 'USER_LOGIN';
 const USER_LOGOUT = 'USER_LOGOUT';
 const USER_REGISTER = 'USER_REGISTER';
 const GET_USER_INFO = 'GET_USER_INFO';
+// 重置密码相关
+const SET_FORGET_USERNAME = 'SET_FORGET_USERNAME';
 const CHECK_USER_NAME = 'CHECK_USER_NAME';
 const CHCEK_USER_QUESTION = 'CHCEK_USER_QUESTION';
 const RESET_PASSWORD = 'RESET_PASSWORD';
@@ -31,7 +33,11 @@ const initState = {
         cartTotalPrice: 0
     },
     errorMsg: '',
-    userQusetion: ''
+    forgetPassword: {
+        username: '',
+        question: '',
+        token: ''
+    }
 };
 export function userInfo(state = initState, action) {
     switch (action.type) {
@@ -64,13 +70,47 @@ export function userInfo(state = initState, action) {
             return {
                 ...initState
             }
+        case SET_FORGET_USERNAME:
+            // 找回密码的用户名
+            return {
+                ...state,
+                forgetPassword: {
+                    ...state.forgetPassword,
+                    username: action.username
+                }
+            }
         case CHECK_USER_NAME:
+            // 获取密码提示问题
             action
                 .history
                 .push('/pass-reset/question');
             return {
                 ...state,
-                userQusetion: action.question
+                forgetPassword: {
+                    ...state.forgetPassword,
+                    username: action.username,
+                    question: action.question
+                }
+
+            }
+        case CHCEK_USER_QUESTION:
+            // 通过密码提示问题验证
+            action
+                .history
+                .push('/pass-reset/password');
+            return {
+                ...state,
+                forgetPassword: {
+                    ...state.forgetPassword,
+                    token: action.token
+                }
+            }
+        case RESET_PASSWORD:
+            action
+                .history
+                .push('/result/success');
+            return {
+                ...state
             }
         case GET_CART_INFO:
             // 获取用户购物车信息
@@ -144,7 +184,6 @@ export function userRegister({
     answer
 }, history) {
     return dispatch => {
-        
         // username,password,email,phone,question,answer
         Axios
             .post('/user/register.do', Qs.stringify({
@@ -156,7 +195,6 @@ export function userRegister({
             answer
         }))
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
                     if (res.data.status === 0) {
                         dispatch(actionRegister(history));
@@ -175,10 +213,7 @@ export function userRegister({
 export function checkUserName(username) {
     return dispatch => {
         Axios
-            .post('/user/check_valid.do',Qs.stringify( {
-                str: username,
-                type: 'username'
-            }))
+            .post('/user/check_valid.do', Qs.stringify({str: username, type: 'username'}))
             .then(res => {
                 if (res.status === 200) {
                     if (res.data.status === 1) {
@@ -227,25 +262,82 @@ export function getUserInfo() {
     }
 }
 // 重置密码流程 验证用户名是否有密码提示问题
-function checkUsername(history, question) {
-    return {history, question, type: CHECK_USER_NAME}
+function setForgetUsername(username) {
+    return {username, type: SET_FORGET_USERNAME}
+}
+
+function checkUsername(history, question, username) {
+    return {history, question, username, type: CHECK_USER_NAME}
 }
 export function checkUserHasQuestion(username, history) {
     return dispatch => {
+        dispatch(setForgetUsername(username));
         Axios
-            .post('/user/forget_get_question.do', {username})
+            .post('/user/forget_get_question.do', Qs.stringify({username}))
             .then(res => {
                 if (res.status === 200) {
                     if (res.data.status === 1) {
                         dispatch(clearErrorMsg(res.data.msg));
                     } else {
-                        dispatch(checkUsername(history, res.data.data));
+                        dispatch(checkUsername(history, res.data.data, username));
                     }
                 }
             })
     }
 }
-// 验证密码提示问题 重置密码 获取购物车信息
+// 验证密码提示问题
+function setToken(token, history) {
+    return {token, history, type: CHCEK_USER_QUESTION};
+}
+export function checkAnswer(answer, history) {
+    return (dispatch, getState) => {
+        const {username, question} = getState().userInfo.forgetPassword
+        Axios
+            .post('/user/forget_check_answer.do', Qs.stringify({username, question, answer}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        // 请求成功，存储token
+                        dispatch(setToken(res.data.data, history));
+                    } else {
+                        // 失败
+                        dispatch(clearErrorMsg(res.data.msg))
+                    }
+                }
+            })
+    }
+
+}
+
+// 重置密码
+function resetPwd(history) {
+    return {history, type: RESET_PASSWORD}
+}
+export function resetPassword(passwordNew, history) {
+    return (dispatch, getState) => {
+        // username,passwordNew,forgetToken
+        const {username, token} = getState().userInfo.forgetPassword;
+        Axios
+            .post('/user/forget_reset_password.do', Qs.stringify({username, passwordNew, forgetToken: token}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        // 修改成功
+                        dispatch(resetPwd(history))
+                    } else if (res.data.status === 1 && res.data.msg === '修改密码操作失效') {
+                        // 修改密码操作失效
+                        dispatch(clearErrorMsg(res.data.msg));
+                    } else {
+                        // token失效 history.push('/pass-reset');
+                        dispatch(clearErrorMsg('操作已超时'));
+                    }
+                }
+            })
+    }
+}
+
+
+//获取购物车信息
 function checkCartInfo(payload) {
     return {payload, type: GET_CART_INFO}
 }

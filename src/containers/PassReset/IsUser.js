@@ -13,8 +13,7 @@ class componentName extends Component {
     }
     submitUsername(ev){
         const {username} =this.state;
-        const {history} = this.props;
-        this.props.handleSubmit(username,history);
+        this.props.handleSubmit(username);
     }
     render() {
         return (
