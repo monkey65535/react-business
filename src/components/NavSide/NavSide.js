@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link,withRouter} from 'react-router-dom';
 import './NavSide.scss';
+@withRouter
 class NavSide extends Component {
     constructor() {
         super();
@@ -11,19 +12,19 @@ class NavSide extends Component {
                     {
                         name: 'user-center',
                         desc: '个人中心',
-                        to: './usercenter'
+                        to: '/usercenter'
                     }, {
                         name: 'order-list',
                         desc: '我的订单',
-                        to: './orderlist'
+                        to: '/orderlist'
                     }, {
                         name: 'user-pass-update',
                         desc: '修改密码',
-                        to: './pass-reset'
+                        to: '/pass-reset'
                     }, {
                         name: 'about',
                         desc: '关于MMall',
-                        to: './about'
+                        to: '/about'
                     }
                 ]
             }
@@ -35,11 +36,14 @@ class NavSide extends Component {
             .state
             .navOption
             .navList
-            .map(el => (
-                <li className="nav-item" key={el.name}>
-                    <Link className="link" to={el.to}>{el.desc}</Link>
-                </li>
-            ))
+            .map(el => {
+                const classname = `nav-item ${this.props.match.path === el.to ? 'active' : ''}`;
+                return (
+                    <li className={classname} key={el.name}>
+                        <Link className="link" to={el.to}>{el.desc}</Link>
+                    </li>
+                )
+            })
         return (
             <ul className="nav-side">
             {navList}

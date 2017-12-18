@@ -22,7 +22,10 @@ import Login from './containers/Login/Login';
 import Register from './containers/Register/Register';
 import Result from './containers/Result/Result';
 import PassReset from './containers/PassReset/PassReset';
+import UserCenter from './containers/UserCenter/UserCenter';
+import Nav from './components/Nav/Nav';
 import Footer from './components/Footer/Footer';
+
 
 // redux调试工具
 const reduxDevtools = window.devToolsExtension
@@ -38,10 +41,12 @@ ReactDOM.render(
         <div className="router-dom">
             <Switch>
                 <Route path='/' exact component={Home}></Route>
+                <Route path='/usercenter' component={UserCenter}></Route>
                 <Route path='/login' component={Login}></Route>
                 <Route path='/register' component={Register}></Route>
                 <Route path='/result/:type' component={Result}></Route>
                 <Route path='/pass-reset' component={PassReset}></Route>
+                
             </Switch>
             <Footer></Footer>
         </div>

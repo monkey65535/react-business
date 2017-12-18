@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import NavSimple from '../../components/NavSimple/NavSimple';
-import {Link, Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {clearErrorMsg,checkUserHasQuestion,checkAnswer,resetPassword} from '../../reduxs/userinfo.redux';
 

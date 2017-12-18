@@ -12,6 +12,10 @@ const CHCEK_USER_QUESTION = 'CHCEK_USER_QUESTION';
 const RESET_PASSWORD = 'RESET_PASSWORD';
 // 购物车相关
 const GET_CART_INFO = 'GET_CART_INFO';
+//获取当前登录用户的详细信息 并强制登录
+const GET_INFORMATION = 'GET_INFORMATION';
+// 登录状态更新个人信息
+const UPDATE_INFORMATION = 'UPDATE_INFORMATION';
 // 操作相关
 const CLEAR_ERRMSG = 'CLER_ERRMSG';
 
@@ -37,6 +41,17 @@ const initState = {
         username: '',
         question: '',
         token: ''
+    },
+    userInformation: {
+        username: '',
+        id: '',
+        email: '',
+        phone: '',
+        question: '',
+        answer: '',
+        role: '',
+        createTime: '',
+        updateTime: ''
     }
 };
 export function userInfo(state = initState, action) {
@@ -121,9 +136,25 @@ export function userInfo(state = initState, action) {
                 }
             }
         case CLEAR_ERRMSG:
+            // 注册相关提示信息修改
             return {
                 ...state,
                 errorMsg: action.msg
+            }
+        case GET_INFORMATION:
+            return {
+                ...state,
+                userInformation: {
+                    ...action.payload
+                }
+            }
+        case UPDATE_INFORMATION:
+            action.history.push('/usercenter');
+            return {
+                ...state,
+                userInformation: {
+                    ...action.payload
+                }
             }
         default:
             return {
@@ -336,7 +367,6 @@ export function resetPassword(passwordNew, history) {
     }
 }
 
-
 //获取购物车信息
 function checkCartInfo(payload) {
     return {payload, type: GET_CART_INFO}
@@ -358,6 +388,55 @@ export function getCartInfo() {
                         payload = initState.cartDate;
                     }
                     dispatch(checkCartInfo(payload))
+                }
+            })
+    }
+}
+
+// 获取当前登录用户的详细信息，并强制登录
+function getUserInfo_2(payload) {
+    return {payload, type: GET_INFORMATION};
+}
+export function getUserInformation(history, pathname) {
+    return dispatch => {
+        Axios
+            .post('/user/get_information.do')
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(getUserInfo_2({
+                            ...res.data.data
+                        }));
+                    } else {
+                        // 需要登录
+                        history.push('/login');
+                    }
+                }
+            })
+    }
+}
+
+//修改当前用户的个人信息
+function updateInfo(payload, history) {
+    return {payload, history, type: UPDATE_INFORMATION};
+}
+export function updateUserInformation(information, history) {
+    return dispatch => {
+        Axios
+            .post('/user/update_information.do', Qs.stringify({
+            ...information
+        }))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        // 更新成功
+                        dispatch(updateInfo(res.data.data, history));
+                    } else if (res.data.status === 1) {
+                        // 需要登录
+                        history.push('/login');
+                    } else {
+                        alert('error');
+                    }
                 }
             })
     }
