@@ -149,7 +149,9 @@ export function userInfo(state = initState, action) {
                 }
             }
         case UPDATE_INFORMATION:
-            action.history.push('/usercenter');
+            action
+                .history
+                .push('/usercenter');
             return {
                 ...state,
                 userInformation: {
@@ -439,5 +441,16 @@ export function updateUserInformation(information, history) {
                     }
                 }
             })
+    }
+}
+
+// 登录状态下修改个人信息
+export function passwordUpdate(passwordOld,passwordNew,message){
+    return dispatch => {
+        Axios.post('/user/reset_password.do',Qs.stringify({passwordOld,passwordNew})).then(res=>{
+            if(res.status === 200){
+                message.info(res.data.msg)
+            }
+        })
     }
 }

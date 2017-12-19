@@ -4,7 +4,7 @@ import Header from '../../components/Header/Header';
 import NavSide from '../../components/NavSide/NavSide';
 import Base from './Base';
 import Update from './Update';
-import {Route,Link,Switch} from 'react-router-dom';
+import {Route,Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {getUserInformation,updateUserInformation} from '../../reduxs/userinfo.redux';
 import './UserCenter.scss';
@@ -64,5 +64,4 @@ class UserCenter extends Component {
         );
     }
 }
-
 export default UserCenter;

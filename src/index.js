@@ -23,7 +23,7 @@ import Register from './containers/Register/Register';
 import Result from './containers/Result/Result';
 import PassReset from './containers/PassReset/PassReset';
 import UserCenter from './containers/UserCenter/UserCenter';
-import Nav from './components/Nav/Nav';
+import PassUpdate from './containers/PassUpdate/PassUpdate';
 import Footer from './components/Footer/Footer';
 
 
@@ -46,7 +46,7 @@ ReactDOM.render(
                 <Route path='/register' component={Register}></Route>
                 <Route path='/result/:type' component={Result}></Route>
                 <Route path='/pass-reset' component={PassReset}></Route>
-                
+                <Route path='/pass-update' component={PassUpdate}></Route>
             </Switch>
             <Footer></Footer>
         </div>
