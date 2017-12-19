@@ -10,8 +10,7 @@ const SET_FORGET_USERNAME = 'SET_FORGET_USERNAME';
 const CHECK_USER_NAME = 'CHECK_USER_NAME';
 const CHCEK_USER_QUESTION = 'CHCEK_USER_QUESTION';
 const RESET_PASSWORD = 'RESET_PASSWORD';
-// 购物车相关
-const GET_CART_INFO = 'GET_CART_INFO';
+
 //获取当前登录用户的详细信息 并强制登录
 const GET_INFORMATION = 'GET_INFORMATION';
 // 登录状态更新个人信息
@@ -126,14 +125,6 @@ export function userInfo(state = initState, action) {
                 .push('/result/success');
             return {
                 ...state
-            }
-        case GET_CART_INFO:
-            // 获取用户购物车信息
-            return {
-                ...state,
-                cartDate: {
-                    ...action.payload
-                }
             }
         case CLEAR_ERRMSG:
             // 注册相关提示信息修改
@@ -369,32 +360,6 @@ export function resetPassword(passwordNew, history) {
     }
 }
 
-//获取购物车信息
-function checkCartInfo(payload) {
-    return {payload, type: GET_CART_INFO}
-}
-export function getCartInfo() {
-    return dispatch => {
-        Axios
-            .post('/cart/list.do')
-            .then(res => {
-                if (res.status === 200) {
-                    let payload = null;
-                    if (res.data.status === 0) {
-                        // 获取成功
-                        payload = {
-                            ...res.data.data
-                        }
-                    } else {
-                        // 用户未登录
-                        payload = initState.cartDate;
-                    }
-                    dispatch(checkCartInfo(payload))
-                }
-            })
-    }
-}
-
 // 获取当前登录用户的详细信息，并强制登录
 function getUserInfo_2(payload) {
     return {payload, type: GET_INFORMATION};
@@ -445,12 +410,14 @@ export function updateUserInformation(information, history) {
 }
 
 // 登录状态下修改个人信息
-export function passwordUpdate(passwordOld,passwordNew,message){
+export function passwordUpdate(passwordOld, passwordNew, message) {
     return dispatch => {
-        Axios.post('/user/reset_password.do',Qs.stringify({passwordOld,passwordNew})).then(res=>{
-            if(res.status === 200){
-                message.info(res.data.msg)
-            }
-        })
+        Axios
+            .post('/user/reset_password.do', Qs.stringify({passwordOld, passwordNew}))
+            .then(res => {
+                if (res.status === 200) {
+                    message.info(res.data.msg)
+                }
+            })
     }
 }

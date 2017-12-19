@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {userLogout,getUserInfo,getCartInfo} from '../../reduxs/userinfo.redux';
+import {userLogout,getUserInfo} from '../../reduxs/userinfo.redux';
+import {getCartInfo} from '../../reduxs/cart.redux';
 import './Nav.scss';
 
 @withRouter
-@connect(state => state.userInfo, {userLogout,getUserInfo,getCartInfo})
+@connect(state => state, {userLogout,getUserInfo,getCartInfo})
 class Nav extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +17,7 @@ class Nav extends Component {
     }
     componentDidMount(){
         // 判断登录信息
-        if(this.props.userAbout.userName && this.props.userAbout.userId){
+        if(this.props.userInfo.userAbout.userName && this.props.userInfo.userAbout.userId){
             // 如果有登陆信息，那么不再获取登陆信息
             this.props.getCartInfo();
             return;
@@ -42,11 +43,11 @@ class Nav extends Component {
             .userLogout();
     }
     render() {
-        const isUserLogin = this.props.userAbout.username && this.props.userAbout.id
+        const isUserLogin = this.props.userInfo.userAbout.username && this.props.userInfo.userAbout.id
             ? (
                 <span className="user login">
                     <span className="link-text js-login">
-                        欢迎，<span className="username">{this.props.userAbout.username} 
+                        欢迎，<span className="username">{this.props.userInfo.userAbout.username} 
                         </span>
                     </span>
                     <span className="link js-register" onClick={this.handleLogout}> 退出</span>
@@ -76,7 +77,7 @@ class Nav extends Component {
                         <li className="nav-item">
                             <Link className="link" to='/cart'>
                                 <i className="fa fa-shopping-cart"></i> 购物车 
-                                (<span className="cart-cont">{this.props.cartDate.cartProductVoList.length}</span>)
+                                (<span className="cart-cont">{this.props.cartInfo.cartDate.cartProductVoList.length}</span>)
                             </Link>
                         </li>
                         <li className="nav-item">
