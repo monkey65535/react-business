@@ -17,14 +17,16 @@ import '../node_modules/font-awesome/css/font-awesome.css';
 import './Axios.config';
 
 // 页面组件
+import Footer from './components/Footer/Footer';
 import Home from './containers/Home/Home';
+import List from './containers/List/List';
 import Login from './containers/Login/Login';
 import Register from './containers/Register/Register';
 import Result from './containers/Result/Result';
 import PassReset from './containers/PassReset/PassReset';
 import UserCenter from './containers/UserCenter/UserCenter';
 import PassUpdate from './containers/PassUpdate/PassUpdate';
-import Footer from './components/Footer/Footer';
+
 
 
 // redux调试工具
@@ -47,6 +49,7 @@ ReactDOM.render(
                 <Route path='/result/:type' component={Result}></Route>
                 <Route path='/pass-reset' component={PassReset}></Route>
                 <Route path='/pass-update' component={PassUpdate}></Route>
+                <Route path='/list/:to' component={List}></Route>
             </Switch>
             <Footer></Footer>
         </div>

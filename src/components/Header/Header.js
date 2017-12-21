@@ -14,6 +14,12 @@ class Header extends Component {
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
         this.heandleKeyEnetr = this.heandleKeyEnetr.bind(this);
     }
+    componentWillMount(){
+        const {searchKey} = this.props;
+        if(searchKey){
+            this.setState({searchKeyword:searchKey})
+        }
+    }
     handleChangeKeyword(ev){
         this.setState({
             searchKeyword:ev.target.value
@@ -26,7 +32,7 @@ class Header extends Component {
             return;
         }
         // 如果提交的时候有keyword，那么跳转到list
-        this.props.history.push(`/list/${searchKeyword}`);
+        this.props.history.push(`/list/keyword=${searchKeyword}`);
     }
     heandleKeyEnetr(ev){
         if(ev.keyCode === 13){
@@ -39,7 +45,7 @@ class Header extends Component {
                 <div className="w">
                     <div className="logo">MMALL</div>
                     <div className="search-con">
-                        <input type="text" className="search-input" id="search-input" onKeyUp={this.heandleKeyEnetr} onChange={this.handleChangeKeyword} placeholder="请输入商品名称"/>
+                        <input type="text" className="search-input" id="search-input" onKeyUp={this.heandleKeyEnetr} onChange={this.handleChangeKeyword} placeholder="请输入商品名称" value={this.state.searchKeyword}/>
                         <button className="search-btn btn" id="search-btn" onClick={this.handleSearchSubmit}>搜索</button>
                     </div>
                 </div>

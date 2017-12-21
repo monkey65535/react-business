@@ -115,5 +115,8 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "theme": {
+    "primary-color":"#c60023"
+  },
   "proxy": "http://test.happymmall.com:80"
 }

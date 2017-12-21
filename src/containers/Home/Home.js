@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Nav from '../../components/Nav/Nav';
 import Header from '../../components/Header/Header';
 import {Link} from 'react-router-dom';
+import {Carousel} from 'antd';
 import './Home.scss';
 class Home extends Component {
     render() {
@@ -166,11 +167,12 @@ class Home extends Component {
                     }
                 ]
             }
-        ]
-
+        ];
+        const bannerData = ['banner1','banner2','banner3','banner4','banner5'];
+        // map 关键字
         const keyList = keywordList.map((el, i) => {
             let elList = el.map((e => (
-                <Link to={`/list.html/keyword=${e}`} className='link' key={e}>{e}</Link>
+                <Link to={`/list/keyword=${e}`} className='link' key={e}>{e}</Link>
             )))
             return (
                 <li className="keywords-item" key={i}>
@@ -178,13 +180,14 @@ class Home extends Component {
                 </li>
             )
         });
+        // map 楼层
         const floorList = floorData.map((el, i) => {
             const items = el
                 .goods
                 .map((e, i) => {
                     return (
                         <li className="floor-item" key={e.id}>
-                            <Link to={`./list.html/categoryId=${e.id}`}>
+                            <Link to={`/list/categoryId=${e.id}`}>
                                 <span className="floor-text">{e.name}</span>
                                 <img
                                     className="floor-img"
@@ -202,6 +205,19 @@ class Home extends Component {
                     </ul>
                 </div>
             )
+        });
+        
+        // map banner
+        const bannerList = bannerData.map((el,i)=>{
+            return (
+                <div key={i}>
+                    <img 
+                    src={require(`../../static/image/banner/${el}.jpg`)} 
+                    alt={el} 
+                    width='100%' 
+                    height='100%'/>
+                </div>
+            )
         })
 
         return (
@@ -214,7 +230,10 @@ class Home extends Component {
                             {keyList}
                         </ul>
                         <div className="banner-con">
-                            <div className="loading"></div>
+                        <Carousel autoplay>
+                            {bannerList}
+                        </Carousel>
+                            
                         </div>
                     </div>
                     <div className="w">
