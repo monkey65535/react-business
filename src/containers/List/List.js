@@ -36,7 +36,6 @@ class List extends Component {
                             </li>
                         </ul>
                         <ul className="p-list-con"></ul>
-
                     </div>
                 </div>
             </div>
