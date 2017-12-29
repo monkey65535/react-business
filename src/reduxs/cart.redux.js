@@ -1,10 +1,10 @@
 import Axios from 'axios';
-// eslint-disable-next-line
+import {message} from 'antd';
 import Qs from 'qs';
 
 // 购物车相关
 const GET_CART_INFO = 'GET_CART_INFO';
-
+const ADD_GOODS_TO_CART = 'ADD_GOODS_TO_CART';
 //reducer
 const initState = {
     cartDate: {
@@ -18,6 +18,17 @@ export function cartInfo(state = initState, action) {
     switch (action.type) {
         case GET_CART_INFO:
             // 获取用户购物车信息
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+            // 添加商品
+        case ADD_GOODS_TO_CART:
+            action
+                .history
+                .push('/result/success');
             return {
                 ...state,
                 cartDate: {
@@ -52,6 +63,28 @@ export function getCartInfo() {
                         payload = initState.cartDate;
                     }
                     dispatch(checkCartInfo(payload))
+                }
+            })
+    }
+}
+
+function addGoods(payload, history) {
+    return {payload, history, type: ADD_GOODS_TO_CART}
+}
+export function addGoodsToCart({
+    productId,
+    count
+}, history) {
+    return dispatch => {
+        Axios
+            .post('/cart/add.do', Qs.stringify({productId, count}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(addGoods(res.data.data, history));
+                    } else {
+                        message.info(res.data.msg);
+                    }
                 }
             })
     }

@@ -26,7 +26,7 @@ import Result from './containers/Result/Result';
 import PassReset from './containers/PassReset/PassReset';
 import UserCenter from './containers/UserCenter/UserCenter';
 import PassUpdate from './containers/PassUpdate/PassUpdate';
-
+import ListDetail from './containers/ListDetail/ListDetail';
 
 
 // redux调试工具
@@ -49,7 +49,8 @@ ReactDOM.render(
                 <Route path='/result/:type' component={Result}></Route>
                 <Route path='/pass-reset' component={PassReset}></Route>
                 <Route path='/pass-update' component={PassUpdate}></Route>
-                <Route path='/list/:to' component={List}></Route>
+                <Route path='/list/:to/:page' component={List}></Route>
+                <Route path='/list-detail/:id' component={ListDetail}></Route>
             </Switch>
             <Footer></Footer>
         </div>

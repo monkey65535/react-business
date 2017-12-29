@@ -32,7 +32,7 @@ class Header extends Component {
             return;
         }
         // 如果提交的时候有keyword，那么跳转到list
-        this.props.history.push(`/list/keyword=${searchKeyword}`);
+        this.props.history.push(`/list/keyword=${searchKeyword}/1`);
     }
     heandleKeyEnetr(ev){
         if(ev.keyCode === 13){
