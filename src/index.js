@@ -27,7 +27,7 @@ import PassReset from './containers/PassReset/PassReset';
 import UserCenter from './containers/UserCenter/UserCenter';
 import PassUpdate from './containers/PassUpdate/PassUpdate';
 import ListDetail from './containers/ListDetail/ListDetail';
-
+import Cart from './containers/Cart/Cart';
 
 // redux调试工具
 const reduxDevtools = window.devToolsExtension
@@ -51,6 +51,7 @@ ReactDOM.render(
                 <Route path='/pass-update' component={PassUpdate}></Route>
                 <Route path='/list/:to/:page' component={List}></Route>
                 <Route path='/list-detail/:id' component={ListDetail}></Route>
+                <Route path='/cart' component={Cart}></Route>
             </Switch>
             <Footer></Footer>
         </div>
