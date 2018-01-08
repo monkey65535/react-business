@@ -51,7 +51,40 @@ export function cartInfo(state = initState, action) {
                     ...action.payload
                 }
             }
+            // 更新商品数量
         case UPDATE_GOODS_TO_CART:
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+            // 单个商品选中
+        case SELECT_GOODS_TO_CART:
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+            // 单个商品取消选中
+        case UN_SELECT_GOODS_TO_CART:
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+            //全选
+        case CART_ALL_CHECKED:
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+            // 取消全选
+        case CART_ALL_UN_CHECKED:
             return {
                 ...state,
                 cartDate: {
@@ -147,5 +180,71 @@ export function deleteGoodsToCart(productIds) {
                     }
                 }
             })
+    }
+}
+
+// 购物车选中某个商品
+function selectGood(payload) {
+    return {payload, type: SELECT_GOODS_TO_CART}
+}
+export function selectGoodsToCart(productId) {
+    return dispatch => {
+        Axios
+            .post('/cart/select.do', Qs.stringify({productId}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(selectGood(res.data.data))
+                    }
+                }
+            });
+    }
+}
+
+// .购物车取消选中某个商品
+function unSelectGood(payload) {
+    return {payload, type: UN_SELECT_GOODS_TO_CART}
+}
+export function unSelectGoodsToCart(productId) {
+    return dispatch => {
+        Axios
+            .post('/cart/un_select.do', Qs.stringify({productId}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(unSelectGood(res.data.data))
+                    }
+                }
+            })
+    }
+}
+// 购物车全选
+function checkAll(payload) {
+    return {payload, type: CART_ALL_CHECKED}
+}
+export function cartCheckAll(){
+    return dispatch=>{
+        Axios.post('/cart/select_all.do').then(res=>{
+            if (res.status === 200) {
+                if (res.data.status === 0) {
+                    dispatch(checkAll(res.data.data))
+                }
+            }
+        })
+    }
+}
+function unCheckAll(payload) {
+    return {payload, type: CART_ALL_UN_CHECKED}
+}
+
+export function cartUnCheckAll(){
+    return dispatch=>{
+        Axios.post('/cart/un_select_all.do').then(res=>{
+            if (res.status === 200) {
+                if (res.data.status === 0) {
+                    dispatch(unCheckAll(res.data.data))
+                }
+            }
+        })
     }
 }

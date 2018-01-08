@@ -11,16 +11,15 @@ class CartGoodItem extends Component {
         this.handleChecked = this
             .handleChecked
             .bind(this);
-        this.handleUnChecked = this
-            .handleUnChecked
-            .bind(this);
     }
     handleShowModel = () => {
         this.setState({visible: true});
     }
     handleOk = (e) => {
         const {productId} = this.props.info;
-        this.props.deleteGoodsToCart([productId]);
+        this
+            .props
+            .deleteGoodsToCart([productId]);
         this.setState({visible: false});
     }
     handleCancel = (e) => {
@@ -46,8 +45,14 @@ class CartGoodItem extends Component {
             .props
             .updateGoodsToCart(productId, newNum);
     }
-    handleChecked() {}
-    handleUnChecked() {}
+    handleChecked() {
+        const {productChecked, productId} = this.props.info;
+        if(productChecked === 1){
+            this.props.unSelectGoodsToCart(productId);
+        }else{
+            this.props.selectGoodsToCart(productId);
+        }
+    }
     render() {
         const host = this.props.host;
         const {
@@ -70,7 +75,9 @@ class CartGoodItem extends Component {
                             className="cart-select"
                             checked={productChecked === 1
                             ? 'checked'
-                            : ''}/>
+                            : ''} 
+                            onClick={this.handleChecked}
+                        />
                     </label>
                 </td>
                 <td className="cart-cell cell-img">
@@ -101,13 +108,11 @@ class CartGoodItem extends Component {
                 </td>
                 <td className="cart-cell cell-total">{productTotalPrice}</td>
                 <td className="cart-cell cell-opera">
-                    <span
-                        className="link cart-delete"
-                        onClick={this.handleShowModel}>删除</span>
+                    <span className="link cart-delete" onClick={this.handleShowModel}>删除</span>
                 </td>
                 <Modal
                     title="提示"
-                    cancelText = "取消"
+                    cancelText="取消"
                     okText="确定"
                     visible={this.state.visible}
                     onOk={this.handleOk}

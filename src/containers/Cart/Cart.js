@@ -6,15 +6,37 @@ import CartGoodItem from './CartGoodItem';
 import './Cart.scss';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {updateGoodsToCart, deleteGoodsToCart} from '../../reduxs/cart.redux';
+import {
+    updateGoodsToCart,
+    deleteGoodsToCart,
+    selectGoodsToCart,
+    unSelectGoodsToCart,
+    cartCheckAll,
+    cartUnCheckAll
+} from '../../reduxs/cart.redux';
 import {message} from 'antd';
 
-@connect(state => state, {updateGoodsToCart, deleteGoodsToCart})
+@connect(state => state, {
+    updateGoodsToCart,
+    deleteGoodsToCart,
+    selectGoodsToCart,
+    unSelectGoodsToCart,
+    cartCheckAll,
+    cartUnCheckAll
+})
 class Cart extends Component {
     componentDidMount() {
         const {username, id} = this.props.userInfo.userAbout;
         if (!username && !id) {
             message.error('请先登陆');
+        }
+    }
+    handleChangeCheckType = () => {
+        const {allChecked} = this.props.cartInfo.cartDate;
+        if(allChecked){
+            this.props.cartUnCheckAll();
+        }else{
+            this.props.cartCheckAll();
         }
     }
     render() {
@@ -27,13 +49,14 @@ class Cart extends Component {
         const goodsItem = cartProductVoList.length > 0
             ? cartProductVoList.map(el => {
                 return (
-                    <CartGoodItem 
+                    <CartGoodItem
                         key={el.id}
-                        info={el} 
+                        info={el}
                         host={imageHost}
                         deleteGoodsToCart={this.props.deleteGoodsToCart}
                         updateGoodsToCart={this.props.updateGoodsToCart}
-                    ></CartGoodItem>
+                        selectGoodsToCart={this.props.selectGoodsToCart}
+                        unSelectGoodsToCart={this.props.unSelectGoodsToCart}></CartGoodItem>
                 )
             })
             : null;
@@ -53,7 +76,9 @@ class Cart extends Component {
                                                 className="cart-select-all"
                                                 checked={allChecked
                                                 ? 'checked'
-                                                : ''}/>
+                                                : ''}
+                                                onClick={this.handleChangeCheckType}
+                                            />
                                             <span>全选</span>
                                         </label>
                                     </th>
@@ -86,7 +111,9 @@ class Cart extends Component {
                                     className="cart-select-all"
                                     checked={allChecked
                                     ? 'checked'
-                                    : ''}/>
+                                    : ''}
+                                    onClick={this.handleChangeCheckType}
+                                />
                                 <span>全选</span>
                             </label>
                         </div>
