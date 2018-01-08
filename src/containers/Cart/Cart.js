@@ -14,7 +14,7 @@ import {
     cartCheckAll,
     cartUnCheckAll
 } from '../../reduxs/cart.redux';
-import {message} from 'antd';
+import {message, Modal} from 'antd';
 
 @connect(state => state, {
     updateGoodsToCart,
@@ -25,6 +25,12 @@ import {message} from 'antd';
     cartUnCheckAll
 })
 class Cart extends Component {
+    constructor() {
+        super();
+        this.state = {
+            visible: false
+        }
+    }
     componentDidMount() {
         const {username, id} = this.props.userInfo.userAbout;
         if (!username && !id) {
@@ -33,11 +39,37 @@ class Cart extends Component {
     }
     handleChangeCheckType = () => {
         const {allChecked} = this.props.cartInfo.cartDate;
-        if(allChecked){
-            this.props.cartUnCheckAll();
-        }else{
-            this.props.cartCheckAll();
+        if (allChecked) {
+            this
+                .props
+                .cartUnCheckAll();
+        } else {
+            this
+                .props
+                .cartCheckAll();
         }
+    }
+    handleDeleteChecked = () => {
+        const {cartProductVoList} = this.props.cartInfo.cartDate;
+        // eslint-disable-next-line
+        const checkedIds = cartProductVoList.map(el => {
+            if (el.productChecked === 1) {
+                return el.productId
+            }
+        });
+        console.log(checkedIds);
+        this.props.deleteGoodsToCart(checkedIds);
+        this.setState({
+            visible: false
+        })
+    }
+    handleCancel=()=>{
+        this.setState({
+            visible: false
+        })
+    }
+    handleShowModel = () => {
+        this.setState({visible: true});
     }
     render() {
         const crumb = [
@@ -63,6 +95,13 @@ class Cart extends Component {
         const hasGoods = cartProductVoList.length > 0
             ? (
                 <div className="page-wrap w">
+                    <Modal
+                        title="提示"
+                        cancelText="取消"
+                        okText="确定"
+                        visible={this.state.visible}
+                        onOk={this.handleDeleteChecked}
+                        onCancel={this.handleCancel}>确定要删除么？</Modal>
                     {/*heander*/}
                     <div className="cart-header">
                         <table className="cart-table">
@@ -77,8 +116,7 @@ class Cart extends Component {
                                                 checked={allChecked
                                                 ? 'checked'
                                                 : ''}
-                                                onClick={this.handleChangeCheckType}
-                                            />
+                                                onClick={this.handleChangeCheckType}/>
                                             <span>全选</span>
                                         </label>
                                     </th>
@@ -112,15 +150,14 @@ class Cart extends Component {
                                     checked={allChecked
                                     ? 'checked'
                                     : ''}
-                                    onClick={this.handleChangeCheckType}
-                                />
+                                    onClick={this.handleChangeCheckType}/>
                                 <span>全选</span>
                             </label>
                         </div>
                         <div className="delete-con">
                             <span className="link delete-selected">
                                 <i className="fa fa-trash-o"></i>
-                                <span>删除选中</span>
+                                <span onClick={this.handleShowModel}>删除选中</span>
                             </span>
                         </div>
                         <div className="submit-con">

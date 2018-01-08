@@ -28,7 +28,7 @@ import UserCenter from './containers/UserCenter/UserCenter';
 import PassUpdate from './containers/PassUpdate/PassUpdate';
 import ListDetail from './containers/ListDetail/ListDetail';
 import Cart from './containers/Cart/Cart';
-
+import OrderConfirm from './containers/OrderConfrim/OrderConfrim';
 // redux调试工具
 const reduxDevtools = window.devToolsExtension
     ? window.devToolsExtension()
@@ -52,6 +52,7 @@ ReactDOM.render(
                 <Route path='/list/:to/:page' component={List}></Route>
                 <Route path='/list-detail/:id' component={ListDetail}></Route>
                 <Route path='/cart' component={Cart}></Route>
+                <Route path='/order-confirm' component={OrderConfirm}></Route>
             </Switch>
             <Footer></Footer>
         </div>

@@ -18,8 +18,6 @@ const UN_SELECT_GOODS_TO_CART = 'UN_SELECT_GOODS_TO_CART';
 const CART_ALL_CHECKED = 'CART_ALL_CHECKED';
 // 购物车取消全选
 const CART_ALL_UN_CHECKED = 'CART_ALL_UN_CHECKED';
-// 查询购物车商品数量
-const GET_CART_GOODS_NUM = 'GET_CART_GOODS_NUM';
 
 //reducer
 const initState = {
@@ -85,6 +83,13 @@ export function cartInfo(state = initState, action) {
             }
             // 取消全选
         case CART_ALL_UN_CHECKED:
+            return {
+                ...state,
+                cartDate: {
+                    ...action.payload
+                }
+            }
+        case DELETE_GOODS_TO_CART:
             return {
                 ...state,
                 cartDate: {
@@ -222,29 +227,33 @@ export function unSelectGoodsToCart(productId) {
 function checkAll(payload) {
     return {payload, type: CART_ALL_CHECKED}
 }
-export function cartCheckAll(){
-    return dispatch=>{
-        Axios.post('/cart/select_all.do').then(res=>{
-            if (res.status === 200) {
-                if (res.data.status === 0) {
-                    dispatch(checkAll(res.data.data))
+export function cartCheckAll() {
+    return dispatch => {
+        Axios
+            .post('/cart/select_all.do')
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(checkAll(res.data.data))
+                    }
                 }
-            }
-        })
+            })
     }
 }
 function unCheckAll(payload) {
     return {payload, type: CART_ALL_UN_CHECKED}
 }
 
-export function cartUnCheckAll(){
-    return dispatch=>{
-        Axios.post('/cart/un_select_all.do').then(res=>{
-            if (res.status === 200) {
-                if (res.data.status === 0) {
-                    dispatch(unCheckAll(res.data.data))
+export function cartUnCheckAll() {
+    return dispatch => {
+        Axios
+            .post('/cart/un_select_all.do')
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(unCheckAll(res.data.data))
+                    }
                 }
-            }
-        })
+            })
     }
 }
