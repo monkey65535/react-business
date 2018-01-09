@@ -5,7 +5,22 @@ import Header from '../../components/Header/Header';
 import Crumb from '../../components/Crumb/Crumb';
 import UserAddress from '../../components/UserAddress/UserAddress';
 import OrderItem from '../../components/OrderItem/OrderItem';
+import AddressModel from './AddressModel';
 class OrderConfrim extends Component {
+    constructor() {
+        super();
+        this.state = {
+            isShow: false,
+            isUpdate: false
+        }
+    }
+    handleOpenModel(isUpdate) {
+        isUpdate = !!isUpdate;
+        this.setState({isShow: true, isUpdate: isUpdate})
+    }
+    handleCloseModel() {
+        this.setState({isShow: false, isUpdate: false})
+    }
     render() {
         const crumb = [
             {
@@ -21,7 +36,9 @@ class OrderConfrim extends Component {
                     <div className="panel">
                         <h1 className="panel-title">收货地址</h1>
                         <div className="panel-body address-con">
-                            <UserAddress></UserAddress>
+                            <UserAddress 
+                            handleOpenModel={this.handleOpenModel.bind(this)}
+                            ></UserAddress>
                         </div>
                     </div>
                     <div className="panel">
@@ -31,7 +48,14 @@ class OrderConfrim extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="modal-wrap"></div>
+                <div className="modal-wrap">
+                    <AddressModel
+                        isShow={this.state.isShow}
+                        addressMessage={{}}
+                        isUpdate={this.state.isUpdate}
+                        handleCloseModel={this.handleCloseModel.bind(this)}
+                        ></AddressModel>
+                </div>
             </div>
         );
     }

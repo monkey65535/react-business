@@ -71,6 +71,9 @@ class Cart extends Component {
     handleShowModel = () => {
         this.setState({visible: true});
     }
+    handleGoOrder = ()=>{
+        this.props.history.push('/order-confirm');
+    }
     render() {
         const crumb = [
             {
@@ -163,7 +166,7 @@ class Cart extends Component {
                         <div className="submit-con">
                             <span>总价：</span>
                             <span className="submit-total">￥{cartTotalPrice}</span>
-                            <span className="btn btn-submit">去结算</span>
+                            <span className="btn btn-submit" onClick={this.handleGoOrder}>去结算</span>
                         </div>
                     </div>
                 </div>

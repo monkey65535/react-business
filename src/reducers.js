@@ -3,5 +3,6 @@ import {userInfo} from './reduxs/userinfo.redux';
 import {cartInfo} from './reduxs/cart.redux';
 import {goodsList} from './reduxs/goodList.redux';
 import {orderInfo} from './reduxs/order.redux';
+import {addressInfo} from './reduxs/address.redux';
 // 合并reducers
-export default combineReducers({userInfo,cartInfo,goodsList,orderInfo});
+export default combineReducers({userInfo,cartInfo,goodsList,orderInfo,addressInfo});
