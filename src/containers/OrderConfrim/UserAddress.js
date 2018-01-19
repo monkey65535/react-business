@@ -20,9 +20,9 @@ class UserAddress extends Component {
     }
     render() {
         const {list} = this.props;
-        const addressItem = list.map(el => {
+        const addressItem = list.map((el,i) => {
             return (
-                <div className="address-item active">
+                <div className="address-item active" key={i}>
                     <div className="address-title">
                         {el.receiverProvince} {el.receiverCity}
                     </div>

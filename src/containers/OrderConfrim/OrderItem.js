@@ -16,12 +16,14 @@ class OrderItem extends Component {
             return (
                 <tr key={el.productId}>
                     <td className="cell-img">
-                        <a href="./detail.html?productId=productId" target="_blank">
-                            <img className="p-img" src={`${imageHost}${el.productImage}`} alt={el.productName}/>
-                        </a>
+                    <Link to={`/list-detail/${el.productId}`} className='link'>
+                        <img className="p-img" src={`${imageHost}${el.productImage}`} alt={el.productName}/>
+                    </Link>
                     </td>
                     <td className="cell-info">
-                        <a className="link" href="./detail.html?productId=productId" target="_blank">{el.productName}</a>
+                        <Link to={`/list-detail/${el.productId}`} className='link'>
+                            {el.productName}
+                        </Link>
                     </td>
                     <td className="cell-price">￥{el.currentUnitPrice}</td>
                     <td className="cell-count">{el.quantity}</td>

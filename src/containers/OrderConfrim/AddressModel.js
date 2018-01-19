@@ -17,7 +17,8 @@ const initState = {
         id: '',
         userId: ''
     },
-    citys: []
+    citys: [],
+    activeId:-1
 }
 
 @connect(state=>state.addressInfo,{addAddressToUser})
@@ -78,6 +79,7 @@ class AddressInfo extends Component {
         this.props.addAddressToUser(this.state.addressMessage);
     }
     render() {
+        console.log(this.props);
         const provinces = Object.keys(_cities.cityInfo);
         const provincesItem = provinces.map((el, i) => (
             <option value={el} key={i}>{el}</option>
@@ -192,7 +194,4 @@ class AddressInfo extends Component {
         );
     }
 }
-// AddressInfo.propTypes = {     isShow: PropTypes.bool.isRequired,
-// addressMessage: PropTypes.object.isRequired,     isUpdate:
-// PropTypes.bool.isRequired }
 export default AddressInfo;

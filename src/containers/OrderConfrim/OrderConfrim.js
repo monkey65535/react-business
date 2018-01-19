@@ -3,8 +3,8 @@ import './OrderConfrim.scss';
 import Nav from '../../components/Nav/Nav';
 import Header from '../../components/Header/Header';
 import Crumb from '../../components/Crumb/Crumb';
-import UserAddress from '../../components/UserAddress/UserAddress';
-import OrderItem from '../../components/OrderItem/OrderItem';
+import UserAddress from './UserAddress';
+import OrderItem from './OrderItem';
 import AddressModel from './AddressModel';
 class OrderConfrim extends Component {
     constructor() {

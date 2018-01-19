@@ -35,6 +35,8 @@ export function getOrderList(){
             if(res.status === 200){
                 if(res.data.status === 0){
                     dispatch(get_order_list(res.data.data))
+                }else{
+                    message.error(res.data.msg);
                 }
             }
         })
