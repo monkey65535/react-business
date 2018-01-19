@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {getAddressLists} from '../../reduxs/address.redux';
+
+
 @connect(state => state.addressInfo, {getAddressLists})
 class UserAddress extends Component {
     constructor(){

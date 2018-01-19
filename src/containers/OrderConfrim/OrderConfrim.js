@@ -11,7 +11,16 @@ class OrderConfrim extends Component {
         super();
         this.state = {
             isShow: false,
-            isUpdate: false
+            isUpdate: false,
+            addressMessage: {
+                receiverName: '',
+                receiverPhone: '',
+                receiverMobile: '',
+                receiverProvince: '',
+                receiverCity: '',
+                receiverAddress: '',
+                receiverZip: ''
+            }
         }
     }
     handleOpenModel(isUpdate) {
@@ -36,9 +45,10 @@ class OrderConfrim extends Component {
                     <div className="panel">
                         <h1 className="panel-title">收货地址</h1>
                         <div className="panel-body address-con">
-                            <UserAddress 
-                            handleOpenModel={this.handleOpenModel.bind(this)}
-                            ></UserAddress>
+                            <UserAddress
+                                handleOpenModel={this
+                                .handleOpenModel
+                                .bind(this)}></UserAddress>
                         </div>
                     </div>
                     <div className="panel">
@@ -51,10 +61,11 @@ class OrderConfrim extends Component {
                 <div className="modal-wrap">
                     <AddressModel
                         isShow={this.state.isShow}
-                        addressMessage={{}}
+                        addressMessage={this.state.addressMessage}
                         isUpdate={this.state.isUpdate}
-                        handleCloseModel={this.handleCloseModel.bind(this)}
-                        ></AddressModel>
+                        handleCloseModel={this
+                        .handleCloseModel
+                        .bind(this)}></AddressModel>
                 </div>
             </div>
         );

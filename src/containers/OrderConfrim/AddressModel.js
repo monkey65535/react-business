@@ -1,26 +1,38 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {_cities} from '../../util/citys';
+import {connect} from 'react-redux';
+import {addAddressToUser} from '../../reduxs/address.redux';
+
+
 const initState = {
     addressMessage: {
         receiverName: '',
-        province: '',
-        city: '',
+        receiverProvince: '',
+        receiverPhone: '',
+        receiverMobile: '',
+        receiverCity: '',
         receiverAddress: '',
         receiverZip: '',
-        id: ''
-    }
+        id: '',
+        userId: ''
+    },
+    citys: []
 }
+
+@connect(state=>state.addressInfo,{addAddressToUser})
 class AddressInfo extends Component {
     constructor() {
         super();
         this.state = {
             ...initState
         }
+        this.handleSubmitAddress = this.handleSubmitAddress.bind(this);
     }
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         const {addressMessage} = this.props;
         this.setState({
-            addressMessage:{
+            addressMessage: {
                 ...this.state.addressMessage,
                 ...addressMessage
             }
@@ -37,16 +49,58 @@ class AddressInfo extends Component {
         });
     }
     handleCloseModel = () => {
-        this.props.handleCloseModel();
+        this
+            .props
+            .handleCloseModel();
+    }
+    handleChangeProvince(ev) {
+        const {value} = ev.target;
+        const {addressMessage} = this.state;
+        if (value && value.trim()) {
+            this.setState({
+                addressMessage: {
+                    ...addressMessage,
+                    receiverProvince: value.trim()
+                },
+                citys: _cities.getCities(value.trim())
+            })
+        } else {
+            this.setState({
+                addressMessage: {
+                    ...addressMessage,
+                    receiverProvince: ''
+                },
+                citys: []
+            })
+        }
+    }
+    handleSubmitAddress(){
+        this.props.addAddressToUser(this.state.addressMessage);
     }
     render() {
+        const provinces = Object.keys(_cities.cityInfo);
+        const provincesItem = provinces.map((el, i) => (
+            <option value={el} key={i}>{el}</option>
+        ));
+        const citys = this
+            .state
+            .citys
+            .map((el, i) => (
+                <option value={el} key={i}>{el}</option>
+            ));
         return (
-            <div className="modal close" style={{
-                'display':`${this.props.isShow?'block':'none'}`
+            <div
+                className="modal close"
+                style={{
+                'display': `${this.props.isShow
+                    ? 'block'
+                    : 'none'}`
             }}>
                 <div className="modal-container">
                     <div className="modal-header">
-                        <h1 className="modal-title">{this.props.isUpdate ? '更新地址' : '使用新地址'}</h1>
+                        <h1 className="modal-title">{this.props.isUpdate
+                                ? '更新地址'
+                                : '使用新地址'}</h1>
                         <i className="fa fa-close close" onClick={this.handleCloseModel}></i>
                     </div>
                     <div className="modal-body">
@@ -69,11 +123,23 @@ class AddressInfo extends Component {
                                     <span className="required">*</span>
                                     所在城市：
                                 </label>
-                                <select className="form-item" id="receiver-province">
+                                <select
+                                    className="form-item"
+                                    id="receiver-province"
+                                    onChange={this
+                                    .handleChangeProvince
+                                    .bind(this)}>
                                     <option value="">请选择</option>
+                                    {provincesItem}
                                 </select>
-                                <select className="form-item" id="receiver-city">
+                                <select
+                                    className="form-item"
+                                    id="receiver-city"
+                                    onChange={this
+                                    .handleChangeState
+                                    .bind(this, 'receiverCity')}>
                                     <option value="">请选择</option>
+                                    {citys}
                                 </select>
                             </div>
                             <div className="form-line">
@@ -117,7 +183,7 @@ class AddressInfo extends Component {
                             </div>
                             <div className="form-line">
                                 <input type="hidden" id="receiver-id" value={this.state.id}/>
-                                <a className="btn address-btn">保存收货地址</a>
+                                <a className="btn address-btn" onClick={this.handleSubmitAddress}>保存收货地址</a>
                             </div>
                         </div>
                     </div>
@@ -126,9 +192,7 @@ class AddressInfo extends Component {
         );
     }
 }
-AddressInfo.propTypes = {
-    isShow: PropTypes.bool.isRequired,
-    addressMessage: PropTypes.object.isRequired,
-    isUpdate: PropTypes.bool.isRequired
-}
+// AddressInfo.propTypes = {     isShow: PropTypes.bool.isRequired,
+// addressMessage: PropTypes.object.isRequired,     isUpdate:
+// PropTypes.bool.isRequired }
 export default AddressInfo;
