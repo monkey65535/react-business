@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getOrderList} from '../../reduxs/order.redux';
-import {Link} from 'react-router-dom';
+import {getOrderList,createOrderToList} from '../../reduxs/order.redux';
+import {Link,withRouter} from 'react-router-dom';
 
-@connect(state => state.orderInfo, {getOrderList})
+@withRouter
+@connect(state => state.orderInfo, {getOrderList,createOrderToList})
 class OrderItem extends Component {
     componentDidMount() {
         this
@@ -48,7 +49,13 @@ class OrderItem extends Component {
                 <div className="submit-con">
                     <span>订单总价:</span>
                     <span className="submit-total">￥{productTotalPrice}</span>
-                    <span className="btn order-submit">提交订单</span>
+                    <span className="btn order-submit" onClick={()=>{
+                        if(this.props.activeAddress < 1){
+                            alert('请选择收货地址');
+                            return;
+                        }
+                        this.props.createOrderToList(this.props.activeAddress,this.props.history);
+                    }}>提交订单</span>
                 </div>
             </div>
         );

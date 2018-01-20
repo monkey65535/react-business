@@ -79,7 +79,6 @@ class AddressInfo extends Component {
         this.props.addAddressToUser(this.state.addressMessage);
     }
     render() {
-        console.log(this.props);
         const provinces = Object.keys(_cities.cityInfo);
         const provincesItem = provinces.map((el, i) => (
             <option value={el} key={i}>{el}</option>

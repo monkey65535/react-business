@@ -12,6 +12,7 @@ class OrderConfrim extends Component {
         this.state = {
             isShow: false,
             isUpdate: false,
+            activeAddress:-1,
             addressMessage: {
                 receiverName: '',
                 receiverPhone: '',
@@ -22,6 +23,7 @@ class OrderConfrim extends Component {
                 receiverZip: ''
             }
         }
+        this.handleActive = this.handleActive.bind(this);
     }
     handleOpenModel(isUpdate) {
         isUpdate = !!isUpdate;
@@ -29,6 +31,11 @@ class OrderConfrim extends Component {
     }
     handleCloseModel() {
         this.setState({isShow: false, isUpdate: false})
+    }
+    handleActive(activeId){
+        this.setState({
+            activeAddress:activeId
+        });
     }
     render() {
         const crumb = [
@@ -48,13 +55,17 @@ class OrderConfrim extends Component {
                             <UserAddress
                                 handleOpenModel={this
                                 .handleOpenModel
-                                .bind(this)}></UserAddress>
+                                .bind(this)
+                            }
+                            handleActive={this.handleActive}
+                            activeAddress={this.state.activeAddress}
+                            ></UserAddress>
                         </div>
                     </div>
                     <div className="panel">
                         <h1 className="panel-title">商品清单</h1>
                         <div className="panel-body product-con">
-                            <OrderItem></OrderItem>
+                            <OrderItem activeAddress={this.state.activeAddress}></OrderItem>
                         </div>
                     </div>
                 </div>

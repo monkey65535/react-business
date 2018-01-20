@@ -21,11 +21,14 @@ export function addressInfo(state = initState, action) {
                 ...action.payload
             }
         case ADD_ADDRESS:
-            let orderList = [...state.list];
-            orderList = orderList.push(action.payload);
+            const orderList = [...state.list].concat([action.payload]);
             return {
-                ...state,
-                list:[...orderList]
+                list: [...orderList]
+            }
+        case DEL_ADDRESS:
+            const newOrderList = [...state.list].filter(el => (el.id !== action.shippingId));
+            return {
+                list: [...newOrderList]
             }
         default:
             return state
@@ -94,6 +97,22 @@ export function addAddressToUser({
                     } else {
                         message.error('添加失败，请重试');
                     }
+                }
+            })
+    }
+}
+
+function deleteAddress(shippingId) {
+    return {shippingId, type: DEL_ADDRESS}
+}
+export function delAddress(shippingId) {
+    return dispatch => {
+        Axios
+            .post('/shipping/del.do', Qs.stringify({shippingId}))
+            .then(res => {
+                if (res.status === 200) {
+                    message.info(res.data.data);
+                    dispatch(deleteAddress(shippingId));
                 }
             })
     }
