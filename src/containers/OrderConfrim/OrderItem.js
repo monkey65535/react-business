@@ -54,6 +54,7 @@ class OrderItem extends Component {
                             alert('请选择收货地址');
                             return;
                         }
+                        
                         this.props.createOrderToList(this.props.activeAddress,this.props.history);
                     }}>提交订单</span>
                 </div>
