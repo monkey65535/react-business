@@ -29,6 +29,8 @@ import PassUpdate from './containers/PassUpdate/PassUpdate';
 import ListDetail from './containers/ListDetail/ListDetail';
 import Cart from './containers/Cart/Cart';
 import OrderConfirm from './containers/OrderConfrim/OrderConfrim';
+import OrderList from './containers/OrderList/OrderList';
+import OrderDetail from './containers/OrderDetail/OrderDetail';
 // redux调试工具
 const reduxDevtools = window.devToolsExtension
     ? window.devToolsExtension()
@@ -53,6 +55,8 @@ ReactDOM.render(
                 <Route path='/list-detail/:id' component={ListDetail}></Route>
                 <Route path='/cart' component={Cart}></Route>
                 <Route path='/order-confirm' component={OrderConfirm}></Route>
+                <Route path='/order-list' component={OrderList}></Route>
+                <Route path='/order-detail/:orderId' component={OrderDetail}></Route>
             </Switch>
             <Footer></Footer>
         </div>

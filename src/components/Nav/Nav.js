@@ -81,7 +81,7 @@ class Nav extends Component {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="link" to='/orderlist'>我的订单</Link>
+                            <Link className="link" to='/order-list'>我的订单</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="link" to='/usercenter'>我的Mmall</Link>

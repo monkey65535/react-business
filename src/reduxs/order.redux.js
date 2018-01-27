@@ -5,11 +5,13 @@ import Qs from 'qs';
 // action
 const GET_ORDER_LIST = 'GET_ORDER_LIST';
 const CREATE_ORDER = 'CREATE_ORDER';
+const GET_ORDER_LIST_TO_MAP = 'GET_ORDER_LIST_TO_MAP';
 //reducer
 const initState = {
     orderItemVoList: [],
     imageHost: '',
-    productTotalPrice: 0
+    productTotalPrice: 0,
+    orderListInfo:{}
 };
 
 export function orderInfo(state = initState, action) {
@@ -25,6 +27,13 @@ export function orderInfo(state = initState, action) {
                 .push(`/order-detail/${action.payload.orderNo}`);
             return {
                 ...state
+            }
+        case GET_ORDER_LIST_TO_MAP:
+            return {
+                ...state,
+                orderListInfo:{
+                    ...action.payload
+                }
             }
         default:
             return state
@@ -68,5 +77,30 @@ export function createOrderToList(shippingId, history) {
                     }
                 }
             })
+    }
+}
+
+function orderList(payload) {
+    return {payload, type: GET_ORDER_LIST_TO_MAP}
+}
+export function orderListToMap(pageSize = 10, pageNum = 1, history) {
+    return dispatch => {
+        Axios
+            .post('/order/list.do', Qs.stringify({pageNum, pageSize}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(orderList(res.data.data));
+                    } else {
+                        message.error(res.data.msg);
+                        if (res.data.status === 10) {
+                            history.push('/login');
+                        } else {
+                            message.error(res.data.msg);
+                            history.push('/')
+                        }
+                    }
+                }
+            });
     }
 }
