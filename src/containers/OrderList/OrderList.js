@@ -12,7 +12,7 @@ class OrderList extends Component {
     componentDidMount() {
         this
             .props
-            .orderListToMap();
+            .orderListToMap(100,1,this.props.history);
     }
     render() {
         console.log(this.props);
