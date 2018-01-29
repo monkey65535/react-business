@@ -6,12 +6,16 @@ import Qs from 'qs';
 const GET_ORDER_LIST = 'GET_ORDER_LIST';
 const CREATE_ORDER = 'CREATE_ORDER';
 const GET_ORDER_LIST_TO_MAP = 'GET_ORDER_LIST_TO_MAP';
+const GET_ORDER_INFO = 'GET_ORDER_INFO';
+const CLEAR_ORDER_INFO = 'CLEAR_ORDER_INFO';
+const DELETE_ORDER = 'DELETE_ORDER';
 //reducer
 const initState = {
     orderItemVoList: [],
     imageHost: '',
     productTotalPrice: 0,
-    orderListInfo:{}
+    orderListInfo: {},
+    orderDataInfo: {}
 };
 
 export function orderInfo(state = initState, action) {
@@ -31,9 +35,29 @@ export function orderInfo(state = initState, action) {
         case GET_ORDER_LIST_TO_MAP:
             return {
                 ...state,
-                orderListInfo:{
+                orderListInfo: {
                     ...action.payload
                 }
+            }
+        case GET_ORDER_INFO:
+            return {
+                ...state,
+                orderDataInfo: {
+                    ...action.payload
+                }
+            }
+        case CLEAR_ORDER_INFO:
+            return {
+                ...state,
+                orderDataInfo: {}
+            }
+        case DELETE_ORDER:
+        debugger;
+            action
+                .history
+                .push('/order-list');
+            return {
+                ...state
             }
         default:
             return state
@@ -102,5 +126,48 @@ export function orderListToMap(pageSize = 10, pageNum = 1, history) {
                     }
                 }
             });
+    }
+}
+
+function getOrderInfo(payload) {
+    return {payload, type: GET_ORDER_INFO}
+}
+export function getOrderInfoFromId(orderNo) {
+    return dispatch => {
+        Axios
+            .post('/order/detail.do', Qs.stringify({orderNo}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        dispatch(getOrderInfo(res.data.data))
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                }
+            })
+    }
+}
+
+export function cleanOrderInfo() {
+    return {type: CLEAR_ORDER_INFO}
+}
+
+function deleteOrder(history) {
+    return {history, type: DELETE_ORDER}
+}
+export function deleteOrderToMap(orderNo, history) {
+    return dispatch => {
+        Axios
+            .post('/order/cancel.do', Qs.stringify({orderNo}))
+            .then(res => {
+                if (res.status === 200) {
+                    if (res.data.status === 0) {
+                        message.success('取消订单成功');
+                        dispatch(deleteOrder(history));
+                    } else {
+                        message.error(res.data.msg);
+                    }
+                }
+            })
     }
 }
